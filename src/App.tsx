@@ -28,12 +28,12 @@ const NOIR_IMAGES = {
 // --- Components ---
 
 const NoirCharacter = ({ scrollProgress }: { scrollProgress: any }) => {
-  const y = useTransform(scrollProgress, [0, 1], ['0%', '90%']);
+  // Stop vertical movement after shrinking (at 0.2 scroll progress)
+  const y = useTransform(scrollProgress, [0, 0.2, 1], ['0%', '20%', '20%']);
   const scale = useTransform(scrollProgress, [0, 0.2], [1.2, 0.25]);
   const x = useTransform(scrollProgress, [0, 0.2], ['0px', '0px']);
   const opacity = useTransform(scrollProgress, [0, 0.1], [1, 1]);
   const isHanging = useTransform(scrollProgress, [0, 0.1], [0, 1]);
-  const rotate = useTransform(scrollProgress, [0.1, 1], [0, 5]);
 
   // Image switching logic
   const [isScrolled, setIsScrolled] = useState(false);
@@ -45,13 +45,13 @@ const NoirCharacter = ({ scrollProgress }: { scrollProgress: any }) => {
 
   return (
     <motion.div
-      style={{ y, scale, opacity, rotate, x }}
+      style={{ y, scale, opacity, x }}
       className="fixed right-0 md:right-8 top-32 md:top-48 z-[70] pointer-events-none flex flex-col items-center"
     >
-      {/* Web Thread - Solid White and Visible */}
+      {/* Web Thread - Extends infinitely upwards so it never cuts out when the container scales down */}
       <motion.div
-        style={{ height: '150vh', opacity: isHanging }}
-        className="w-[2px] bg-white absolute bottom-[80%] origin-bottom shadow-[0_0_15px_rgba(255,255,255,0.8)]"
+        style={{ height: '3000vh', opacity: isHanging }}
+        className="w-[2px] bg-white absolute bottom-[72%] left-1/2 -translate-x-1/2 origin-bottom shadow-[0_0_15px_rgba(255,255,255,0.8)]"
       />
 
       {/* Spider-Man Noir Silhouette */}
